@@ -10,18 +10,18 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-    public DbSet<Member> Members => Set<Member>();
-    public DbSet<Book> Books => Set<Book>();
-    public DbSet<Author> Authors => Set<Author>();
-    public DbSet<Category> Categories => Set<Category>();
-    public DbSet<Publisher> Publishers => Set<Publisher>();
-    public DbSet<BookAuthor> BookAuthors => Set<BookAuthor>();
-    public DbSet<BookCategory> BookCategories => Set<BookCategory>();
-    public DbSet<BookCopy> BookCopies => Set<BookCopy>();
-    public DbSet<Loan> Loans => Set<Loan>();
-    public DbSet<Reservation> Reservations => Set<Reservation>();
-    public DbSet<Fine> Fines => Set<Fine>();
-    public DbSet<Payment> Payments => Set<Payment>();
+    public DbSet<Member> Members { get; set; }
+    public DbSet<Book> Books { get; set; }
+    public DbSet<Author> Authors { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<Publisher> Publishers { get; set; }
+    public DbSet<BookAuthor> BookAuthors { get; set; }
+    public DbSet<BookCategory> BookCategories { get; set; }
+    public DbSet<BookCopy> BookCopies { get; set; }
+    public DbSet<Loan> Loans { get; set; }
+    public DbSet<Reservation> Reservations { get; set; }
+    public DbSet<Fine> Fines { get; set; }
+    public DbSet<Payment> Payments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

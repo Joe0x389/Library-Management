@@ -25,14 +25,6 @@ public class AuthController : ControllerBase
         _context = context;
         _passwordHasher = passwordHasher;
         _jwtSettings = jwtOptions.Value;
-
-        var user = new ApplicationUser
-        {
-            UserName = "Ahmed"
-        };
-
-        user.PasswordHash = _passwordHasher.HashPassword(user, "12345");
-        context.Users.Add(user);
     }
 
     [HttpGet("login")]
