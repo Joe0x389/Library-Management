@@ -1,6 +1,7 @@
 using System.Text;
 using LibraryManagement.API.Data;
 using LibraryManagement.API.Middleware;
+using LibraryManagement.API.Models.Common;
 using LibraryManagement.API.Models.Entities;
 using LibraryManagement.API.Repositories;
 using LibraryManagement.API.Repositories.Interfaces;
@@ -27,10 +28,13 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
 
+builder.Services.AddSingleton<PasswordHasher<ApplicationUser>>();
+
 // ---------------- JWT Authentication ----------------
 // Identity manages users/passwords; we still issue our own JWT after Identity validates credentials.
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"]!;
+builder.Services.Configure<JwtSettings>(jwtSettings);
 
 builder.Services.AddAuthentication(options =>
 {
