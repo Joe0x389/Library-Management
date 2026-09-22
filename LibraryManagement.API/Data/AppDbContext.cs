@@ -1,12 +1,9 @@
 using LibraryManagement.API.Models.Entities;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryManagement.API.Data;
 
-// IdentityDbContext<ApplicationUser> gives us AspNetUsers, AspNetRoles, AspNetUserRoles, etc.
-// for free via ASP.NET Core Identity, on top of our own library tables.
-public class AppDbContext : IdentityDbContext<ApplicationUser>
+public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -26,6 +23,10 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder); // required - sets up Identity's own tables first
+
+        builder.Entity<Member>()
+            .HasIndex(m => m.VerificationToken)
+            .IsUnique();
 
         // --- Many-to-many: Book <-> Author ---
         builder.Entity<BookAuthor>().HasKey(ba => new { ba.BookId, ba.AuthorId });
@@ -51,12 +52,6 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
 
         // --- Book <-> ISBN uniqueness ---
         builder.Entity<Book>().HasIndex(b => b.ISBN).IsUnique();
-
-        // --- Member <-> ApplicationUser (1:1) ---
-        builder.Entity<Member>()
-            .HasOne(m => m.User)
-            .WithOne(u => u.Member)
-            .HasForeignKey<Member>(m => m.UserId);
 
         // --- Loan relationships ---
         builder.Entity<Loan>()

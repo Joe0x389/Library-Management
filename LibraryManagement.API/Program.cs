@@ -1,12 +1,11 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using LibraryManagement.API.Data;
 using LibraryManagement.API.Middleware;
 using LibraryManagement.API.Models.Common;
-using LibraryManagement.API.Models.Entities;
 using LibraryManagement.API.Repositories;
 using LibraryManagement.API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -17,7 +16,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // ---------------- ASP.NET Core Identity ----------------
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+/*builder.Services.AddIdentity<Member, IdentityRole>(options =>
 {
     options.Password.RequiredLength = 8;
     options.Password.RequireNonAlphanumeric = false;
@@ -26,14 +25,12 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.User.RequireUniqueEmail = true;
 })
 .AddEntityFrameworkStores<AppDbContext>()
-.AddDefaultTokenProviders();
-
-builder.Services.AddSingleton<PasswordHasher<ApplicationUser>>();
+.AddDefaultTokenProviders();*/
 
 // ---------------- JWT Authentication ----------------
 // Identity manages users/passwords; we still issue our own JWT after Identity validates credentials.
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-var secretKey = jwtSettings["SecretKey"]!;
+var secretKey = jwtSettings["Secret"]!;
 builder.Services.Configure<JwtSettings>(jwtSettings);
 
 builder.Services.AddAuthentication(options =>
@@ -52,6 +49,20 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = jwtSettings["Issuer"],
         ValidAudience = jwtSettings["Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+    };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = context =>
+        {
+            Console.WriteLine($"[JWT ERROR] Authentication failed: {context.Exception.Message}");
+            return Task.CompletedTask;
+        },
+        OnTokenValidated = context =>
+        {
+            Console.WriteLine("[JWT SUCCESS] Token successfully validated!");
+            return Task.CompletedTask;
+        }
     };
 });
 
