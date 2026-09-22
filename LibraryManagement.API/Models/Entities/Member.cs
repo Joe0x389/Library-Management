@@ -16,8 +16,7 @@ public class Member
     public string? Address { get; set; }
     public bool IsDeleted { get; set; } = false;
     public bool EmailConfirmed { get; set; } = false;
-
-    public ICollection<MemberRole> MemberRoles { get; set; } = [];
+    public string? Role { get; set; }
 
     public string? VerificationToken { get; set; }
     public DateTime? TokenExpiresAt { get; set; }

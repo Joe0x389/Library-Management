@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LibraryManagement.API.DTOs;
 
-public class RegisterRequest
+public class RegisterDto
 {
     public required string Name { get; set; }
 
