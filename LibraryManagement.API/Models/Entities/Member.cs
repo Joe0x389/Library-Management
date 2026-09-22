@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 using LibraryManagement.API.Models.Enums;
 
 namespace LibraryManagement.API.Models.Entities;
@@ -17,6 +16,8 @@ public class Member
     public string? Address { get; set; }
     public bool IsDeleted { get; set; } = false;
     public bool EmailConfirmed { get; set; } = false;
+
+    public ICollection<MemberRole> MemberRoles { get; set; } = [];
 
     public string? VerificationToken { get; set; }
     public DateTime? TokenExpiresAt { get; set; }

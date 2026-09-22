@@ -72,6 +72,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("email-verification")]
+    [Authorize]
     public async Task<IActionResult> GetEmailVerificationToken()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)
@@ -121,12 +122,17 @@ public class AuthController : ControllerBase
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(_jwtSettings.Secret);
+        List<Claim> claims = [
+            new Claim(type: ClaimTypes.Name, member.Name),
+            new Claim(type: ClaimTypes.NameIdentifier, member.Id.ToString())
+        ];
+
+        foreach (var claim in User.Claims.Where(c => c.Type == ClaimTypes.Role))     
+            claims.Add(claim);
+
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity([
-                new Claim(type: ClaimTypes.Name, member.Name),
-                new Claim(type: ClaimTypes.NameIdentifier, member.Id.ToString())
-            ]),
+            Subject = new ClaimsIdentity(claims),
             Issuer = _jwtSettings.Issuer,
             Audience = _jwtSettings.Audience,
             Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenExpiryMinutes),

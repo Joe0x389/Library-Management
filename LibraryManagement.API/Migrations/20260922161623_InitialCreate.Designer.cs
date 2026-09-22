@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryManagement.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260922110543_InitialCreate")]
+    [Migration("20260922161623_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -310,6 +310,21 @@ namespace LibraryManagement.API.Migrations
                     b.ToTable("Members");
                 });
 
+            modelBuilder.Entity("LibraryManagement.API.Models.Entities.MemberRole", b =>
+                {
+                    b.Property<int>("MemberId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MemberId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("MemberRoles");
+                });
+
             modelBuilder.Entity("LibraryManagement.API.Models.Entities.Payment", b =>
                 {
                     b.Property<int>("Id")
@@ -394,6 +409,23 @@ namespace LibraryManagement.API.Migrations
                     b.HasIndex("MemberId");
 
                     b.ToTable("Reservations");
+                });
+
+            modelBuilder.Entity("Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("LibraryManagement.API.Models.Entities.Book", b =>
@@ -500,6 +532,25 @@ namespace LibraryManagement.API.Migrations
                     b.Navigation("Member");
                 });
 
+            modelBuilder.Entity("LibraryManagement.API.Models.Entities.MemberRole", b =>
+                {
+                    b.HasOne("LibraryManagement.API.Models.Entities.Member", "Member")
+                        .WithMany("MemberRoles")
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Role", "Role")
+                        .WithMany("MemberRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Member");
+
+                    b.Navigation("Role");
+                });
+
             modelBuilder.Entity("LibraryManagement.API.Models.Entities.Payment", b =>
                 {
                     b.HasOne("LibraryManagement.API.Models.Entities.Fine", "Fine")
@@ -572,12 +623,19 @@ namespace LibraryManagement.API.Migrations
 
                     b.Navigation("Loans");
 
+                    b.Navigation("MemberRoles");
+
                     b.Navigation("Reservations");
                 });
 
             modelBuilder.Entity("LibraryManagement.API.Models.Entities.Publisher", b =>
                 {
                     b.Navigation("Books");
+                });
+
+            modelBuilder.Entity("Role", b =>
+                {
+                    b.Navigation("MemberRoles");
                 });
 #pragma warning restore 612, 618
         }

@@ -19,14 +19,29 @@ public class AppDbContext : DbContext
     public DbSet<Reservation> Reservations { get; set; }
     public DbSet<Fine> Fines { get; set; }
     public DbSet<Payment> Payments { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<MemberRole> MemberRoles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder); // required - sets up Identity's own tables first
 
+        builder.Entity<MemberRole>().HasKey(bc => new { bc.MemberId, bc.RoleId });
+        builder.Entity<MemberRole>()
+            .HasOne(mr => mr.Member)
+            .WithMany(m => m.MemberRoles)
+            .HasForeignKey(mr => mr.MemberId);
+        builder.Entity<MemberRole>()
+            .HasOne(mr => mr.Role)
+            .WithMany(r => r.MemberRoles)
+            .HasForeignKey(mr => mr.RoleId);
+
         builder.Entity<Member>()
             .HasIndex(m => m.VerificationToken)
             .IsUnique();
+
+        builder.Entity<Role>()
+            .HasKey(r => r.Id);
 
         // --- Many-to-many: Book <-> Author ---
         builder.Entity<BookAuthor>().HasKey(ba => new { ba.BookId, ba.AuthorId });

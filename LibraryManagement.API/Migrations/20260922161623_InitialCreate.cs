@@ -84,6 +84,19 @@ namespace LibraryManagement.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Roles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Books",
                 columns: table => new
                 {
@@ -107,6 +120,30 @@ namespace LibraryManagement.API.Migrations
                         column: x => x.PublisherId,
                         principalTable: "Publishers",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MemberRoles",
+                columns: table => new
+                {
+                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    MemberId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MemberRoles", x => new { x.MemberId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_MemberRoles_Members_MemberId",
+                        column: x => x.MemberId,
+                        principalTable: "Members",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MemberRoles_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -347,6 +384,11 @@ namespace LibraryManagement.API.Migrations
                 column: "MemberId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MemberRoles_RoleId",
+                table: "MemberRoles",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Members_VerificationToken",
                 table: "Members",
                 column: "VerificationToken",
@@ -379,6 +421,9 @@ namespace LibraryManagement.API.Migrations
                 name: "BookCategories");
 
             migrationBuilder.DropTable(
+                name: "MemberRoles");
+
+            migrationBuilder.DropTable(
                 name: "Payments");
 
             migrationBuilder.DropTable(
@@ -389,6 +434,9 @@ namespace LibraryManagement.API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "Fines");
