@@ -5,6 +5,8 @@ using LibraryManagement.API.Models.Common;
 using LibraryManagement.API.Repositories;
 using LibraryManagement.API.Repositories.Interfaces;
 using LibraryManagement.API.Services;
+using LibraryManagement.Repositories;
+using LibraryManagement.Services;
 using LibraryManagement.API.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -70,6 +72,11 @@ builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPublisherService, PublisherService>();
 builder.Services.AddScoped<IBookCopyService, BookCopyService>();
+
+builder.Services.AddScoped<IFineRepository, FineRepository>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<IFineService, FineService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 // TODO (each module owner): register your module's specific repository + service here, e.g.
 // builder.Services.AddScoped<IBookRepository, BookRepository>();

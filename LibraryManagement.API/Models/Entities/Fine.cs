@@ -1,4 +1,4 @@
-namespace LibraryManagement.Entities;
+namespace LibraryManagement.API.Models.Entities;
 
 public static class FineStatus
 {
@@ -12,8 +12,10 @@ public static class FineStatus
 public class Fine
 {
     public int Id { get; set; }
-    public int LoanId { get; set; }
+    public int? LoanId { get; set; }
+    public Loan? Loan { get; set; }
     public int MemberId { get; set; }
+    public Member? Member { get; set; }
     public decimal Amount { get; set; }
     public string Reason { get; set; } = string.Empty;
     public string Status { get; set; } = FineStatus.Unpaid;

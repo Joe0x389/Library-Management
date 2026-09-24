@@ -19,11 +19,11 @@ public class UpdateFineDto
 public record PaymentDto(int Id, int FineId, decimal Amount, string PaymentMethod, DateTime PaidAt);
 
 public record FineDto(
-    int Id, int LoanId, int MemberId, decimal Amount, string Reason, string Status,
+    int Id, int? LoanId, int MemberId, decimal Amount, string Reason, string Status,
     DateTime CreatedAt, decimal PaidAmount, decimal RemainingAmount);
 
 public record FineDetailsDto(
-    int Id, int LoanId, int MemberId, decimal Amount, string Reason, string Status,
+    int Id, int? LoanId, int MemberId, decimal Amount, string Reason, string Status,
     DateTime CreatedAt, decimal PaidAmount, decimal RemainingAmount,
     List<PaymentDto> Payments);
 

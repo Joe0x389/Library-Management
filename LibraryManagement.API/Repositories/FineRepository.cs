@@ -1,5 +1,5 @@
-using LibraryManagement.Data;
-using LibraryManagement.Entities;
+using LibraryManagement.API.Data;
+using LibraryManagement.API.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryManagement.Repositories;

@@ -1,6 +1,6 @@
-using LibraryManagement.Common;
+using LibraryManagement.API.Common;
 using LibraryManagement.Dtos;
-using LibraryManagement.Entities;
+using LibraryManagement.API.Models.Entities;
 using LibraryManagement.Repositories;
 
 namespace LibraryManagement.Services;

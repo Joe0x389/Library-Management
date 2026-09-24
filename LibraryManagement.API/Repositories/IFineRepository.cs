@@ -1,4 +1,4 @@
-using LibraryManagement.Entities;
+using LibraryManagement.API.Models.Entities;
 
 namespace LibraryManagement.Repositories;
 

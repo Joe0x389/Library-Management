@@ -1,4 +1,4 @@
-namespace LibraryManagement.Entities;
+namespace LibraryManagement.API.Models.Entities;
 
 public static class PaymentMethods
 {
