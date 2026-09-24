@@ -1,8 +1,0 @@
-C:\Users\Laptop World\Downloads\LibraryManagement\LibraryManagement.API\obj\Debug\net8.0\LibraryManagement.API.csproj.AssemblyReference.cache
-C:\Users\Laptop World\Downloads\LibraryManagement\LibraryManagement.API\obj\Debug\net8.0\rpswa.dswa.cache.json
-C:\Users\Laptop World\Downloads\LibraryManagement\LibraryManagement.API\obj\Debug\net8.0\LibraryManagement.API.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Laptop World\Downloads\LibraryManagement\LibraryManagement.API\obj\Debug\net8.0\LibraryManagement.API.AssemblyInfoInputs.cache
-C:\Users\Laptop World\Downloads\LibraryManagement\LibraryManagement.API\obj\Debug\net8.0\LibraryManagement.API.AssemblyInfo.cs
-C:\Users\Laptop World\Downloads\LibraryManagement\LibraryManagement.API\obj\Debug\net8.0\LibraryManagement.API.csproj.CoreCompileInputs.cache
-C:\Users\Laptop World\Downloads\LibraryManagement\LibraryManagement.API\obj\Debug\net8.0\LibraryManagement.API.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\Laptop World\Downloads\LibraryManagement\LibraryManagement.API\obj\Debug\net8.0\LibraryManagement.API.MvcApplicationPartsAssemblyInfo.cache

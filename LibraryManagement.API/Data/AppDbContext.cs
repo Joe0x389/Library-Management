@@ -1,27 +1,24 @@
 using LibraryManagement.API.Models.Entities;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryManagement.API.Data;
 
-// IdentityDbContext<ApplicationUser> gives us AspNetUsers, AspNetRoles, AspNetUserRoles, etc.
-// for free via ASP.NET Core Identity, on top of our own library tables.
-public class AppDbContext : IdentityDbContext<ApplicationUser>
+public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-    public DbSet<Member> Members => Set<Member>();
-    public DbSet<Book> Books => Set<Book>();
-    public DbSet<Author> Authors => Set<Author>();
-    public DbSet<Category> Categories => Set<Category>();
-    public DbSet<Publisher> Publishers => Set<Publisher>();
-    public DbSet<BookAuthor> BookAuthors => Set<BookAuthor>();
-    public DbSet<BookCategory> BookCategories => Set<BookCategory>();
-    public DbSet<BookCopy> BookCopies => Set<BookCopy>();
-    public DbSet<Loan> Loans => Set<Loan>();
-    public DbSet<Reservation> Reservations => Set<Reservation>();
-    public DbSet<Fine> Fines => Set<Fine>();
-    public DbSet<Payment> Payments => Set<Payment>();
+    public DbSet<Member> Members { get; set; }
+    public DbSet<Book> Books { get; set; }
+    public DbSet<Author> Authors { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<Publisher> Publishers { get; set; }
+    public DbSet<BookAuthor> BookAuthors { get; set; }
+    public DbSet<BookCategory> BookCategories { get; set; }
+    public DbSet<BookCopy> BookCopies { get; set; }
+    public DbSet<Loan> Loans { get; set; }
+    public DbSet<Reservation> Reservations { get; set; }
+    public DbSet<Fine> Fines { get; set; }
+    public DbSet<Payment> Payments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -51,12 +48,6 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
 
         // --- Book <-> ISBN uniqueness ---
         builder.Entity<Book>().HasIndex(b => b.ISBN).IsUnique();
-
-        // --- Member <-> ApplicationUser (1:1) ---
-        builder.Entity<Member>()
-            .HasOne(m => m.User)
-            .WithOne(u => u.Member)
-            .HasForeignKey<Member>(m => m.UserId);
 
         // --- Loan relationships ---
         builder.Entity<Loan>()

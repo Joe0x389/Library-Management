@@ -1,11 +1,12 @@
 using System.Text;
 using LibraryManagement.API.Data;
 using LibraryManagement.API.Middleware;
-using LibraryManagement.API.Models.Entities;
+using LibraryManagement.API.Models.Common;
 using LibraryManagement.API.Repositories;
 using LibraryManagement.API.Repositories.Interfaces;
+using LibraryManagement.API.Services;
+using LibraryManagement.API.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -15,22 +16,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// ---------------- ASP.NET Core Identity ----------------
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-{
-    options.Password.RequiredLength = 8;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Lockout.MaxFailedAccessAttempts = 5;
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
-    options.User.RequireUniqueEmail = true;
-})
-.AddEntityFrameworkStores<AppDbContext>()
-.AddDefaultTokenProviders();
+// ---------------- Services ----------------
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 // ---------------- JWT Authentication ----------------
 // Identity manages users/passwords; we still issue our own JWT after Identity validates credentials.
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-var secretKey = jwtSettings["SecretKey"]!;
+var secretKey = jwtSettings["Secret"]!;
+builder.Services.Configure<JwtSettings>(jwtSettings);
 
 builder.Services.AddAuthentication(options =>
 {
@@ -48,6 +41,20 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = jwtSettings["Issuer"],
         ValidAudience = jwtSettings["Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+    };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = context =>
+        {
+            Console.WriteLine($"[JWT ERROR] Authentication failed: {context.Exception.Message}");
+            return Task.CompletedTask;
+        },
+        OnTokenValidated = context =>
+        {
+            Console.WriteLine("[JWT SUCCESS] Token successfully validated!");
+            return Task.CompletedTask;
+        }
     };
 });
 
