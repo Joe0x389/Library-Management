@@ -62,6 +62,13 @@ builder.Services.AddAuthorization();
 
 // ---------------- Dependency Injection ----------------
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IPublisherRepository, PublisherRepository>();
+
+builder.Services.AddScoped<IAuthorService, AuthorService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IPublisherService, PublisherService>();
 
 // TODO (each module owner): register your module's specific repository + service here, e.g.
 // builder.Services.AddScoped<IBookRepository, BookRepository>();
@@ -106,11 +113,8 @@ var app = builder.Build();
 // ---------------- Middleware pipeline ----------------
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-if (app.Environment.IsDevelopment())
-{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
 
 app.UseHttpsRedirection();
 
